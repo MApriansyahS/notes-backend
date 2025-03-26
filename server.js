@@ -54,7 +54,6 @@ app.get('/notes', (req, res) => {
     });
 });
 
-// Endpoint untuk menambahkan catatan baru
 app.post('/notes', (req, res) => {
     const { title, content } = req.body;
     if (!title || !content) {
@@ -70,6 +69,23 @@ app.post('/notes', (req, res) => {
     });
 });
 
+// Endpoint untuk mengedit catatan
+app.put('/notes/:id', (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: "Judul dan konten harus diisi" });
+    }
+
+    const sql = "UPDATE notes SET title = ?, content = ? WHERE id = ?";
+    db.query(sql, [title, content, id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Gagal memperbarui catatan" });
+        }
+        res.json({ message: "Catatan berhasil diperbarui" });
+    });
+});
 
 app.delete('/notes/:id', (req, res) => {
     const { id } = req.params;
