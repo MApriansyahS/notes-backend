@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'notes-backend-main'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/notes-backend', '.']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args: [
+      'gcloud', 'run', 'deploy', 'notes-backend',
+      '--image', 'gcr.io/$PROJECT_ID/notes-backend',
+      '--platform', 'managed',
+      '--region', 'us-central1',
+      '--allow-unauthenticated'
+    ]
+
+images:
+  - 'gcr.io/$PROJECT_ID/notes-backend'
